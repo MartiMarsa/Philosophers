@@ -12,20 +12,28 @@
 
 #include "philo.h"
 
-/*  los argumentos deben ser numericos. maximo numero de filosofos 200. minimo de tiempo 60 ms  */
-
-int	check_args(char **argv);
+static int	check_args(char **argv);
 
 int	main(int argc, char **argv)
 {
-	if (argc != 5 || argc != 6)
-		return (write(1, "Invalid number of arguments\n", 28));
-	if (check_args(argv) != 0)
-		return (0);
-		
+	t_data				data;
+	t_philo				philo[PHILO_MAX];
+	pthread_mutex_t		forks[PHILO_MAX];
+
+
+	if (argc != 5 && argc != 6)
+		return (write(2, "Invalid number of arguments\n", 28));
+	if (check_args(argv))
+		return (1);
+	init_data(&data, philo);
+	init_forks(forks, ft_atoi(argv[1]));
+	init_philo(philo, &data, forks, argv);
+	thread_create(&data, forks);
+	destory_all(NULL, &data, forks);
+	return (0);
 }
 
-int	check_arg_content(char *argv)
+static int	check_arg_content(char *argv)
 {
 	while (*argv)
 	{
@@ -36,17 +44,24 @@ int	check_arg_content(char *argv)
 	return (0);
 }
 
-int	check_args(char **argv)
+/*
+		Argument checker:
+		philophers > 0 && <= 200
+		Time to die > 60 ms
+		Time to eat > 60 ms
+		Time to sleep > 60 ms
+*/
+static int	check_args(char **argv)
 {
 	if (ft_atoi(argv[1]) <= 0 || ft_atoi(argv[1]) > 200 || check_arg_content(argv[1]) == 1)
-		return (write(1, "Invalid number of philophers\n"));
+		return (write(2, "Invalid number of philophers\n", 29));
 	if (ft_atoi(argv[2]) <= 0 || ft_atoi (argv[2]) < 60 || check_arg_content(argv[2]) == 1)
-		return (write(1, "Invalid time to die\n", 20));
+		return (write(2, "Invalid time to die\n", 20));
 	if (ft_atoi(argv[3]) <= 0 || ft_atoi (argv[3]) < 60 || check_arg_content(argv[3]) == 1)
-		return (write(1, "Invalid time to eat\n", 20));
+		return (write(2, "Invalid time to eat\n", 20));
 	if (ft_atoi(argv[4]) <= 0 || ft_atoi (argv[4]) < 60 || check_arg_content(argv[4]) == 1)
-		return (write(1, "Invalid time to sleep\n", 22));
-	if (argv[6] && ft_atoi(argv[6]) <= 0 || argv[6] && check_arg_content(argv[5]) == 1)
-		return (write(1, "Invalid number of times each philosopher must eat\n", 50));
+		return (write(2, "Invalid time to sleep\n", 22));
+	if (argv[5] && ft_atoi(argv[5]) <= 0 || argv[5] && check_arg_content(argv[5]) == 1)
+		return (write(2, "Invalid number of times each philoopher must eat\n", 50));
 	return (0);
 }

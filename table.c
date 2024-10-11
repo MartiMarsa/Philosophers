@@ -1,6 +1,18 @@
 
 #include "philo.h"
 
+
+// Check if someone has died
+
+int dead_loop(t_philo *philo)
+{
+	pthread_mutex_lock(philo->dead_lock);
+	if (*philo->dead == 1)
+		return (pthread_mutex_unlock(philo->dead_lock), 1);
+	pthread_mutex_unlock(philo->dead_lock);
+	return (0);
+}
+
 //Philo's routine
 void	*start_routine(void *ptr)
 {

@@ -51,6 +51,11 @@ typedef struct s_data
 	t_philo			*philos;
 }					t_data;
 
+typedef struct s_mtx
+{
+	pthread_mutex_t	mtx;
+}				t_mtx;
+
 // MAIN //
 
 int main(int argc, char **argv);

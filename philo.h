@@ -21,6 +21,13 @@
 
 # define PHILO_MAX 201
 
+// Define color codes for different actions
+# define COLOR_RESET "\033[0m"
+# define COLOR_EAT "\033[1;32m"      // Green
+# define COLOR_THINK "\033[1;34m"    // Blue
+# define COLOR_SLEEP "\033[1;33m"    // Yellow
+# define COLOR_DIE "\033[1;31m"      // Red
+
 typedef struct s_philo
 {
 	pthread_t		thread;

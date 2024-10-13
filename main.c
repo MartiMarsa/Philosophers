@@ -18,7 +18,7 @@ int	main(int argc, char **argv)
 {
 	t_data				data;
 	t_philo				philo[PHILO_MAX];
-	pthread_mutex_t		forks[PHILO_MAX];
+	t_mtx				forks[PHILO_MAX];
 
 
 	if (argc != 5 && argc != 6)
@@ -27,9 +27,9 @@ int	main(int argc, char **argv)
 		return (1);
 	init_data(&data, philo);
 	init_forks(forks, ft_atoi(argv[1]));
-	init_philo(philo, &data, forks, argv);
+	init_philos(philo, &data, forks, argv);
 	thread_create(&data, forks);
-	destory_all(NULL, &data, forks);
+	destroy_all(NULL, &data, forks);
 	return (0);
 }
 
@@ -61,7 +61,7 @@ static int	check_args(char **argv)
 		return (write(2, "Invalid time to eat\n", 20));
 	if (ft_atoi(argv[4]) <= 0 || ft_atoi (argv[4]) < 60 || check_arg_content(argv[4]) == 1)
 		return (write(2, "Invalid time to sleep\n", 22));
-	if (argv[5] && ft_atoi(argv[5]) <= 0 || argv[5] && check_arg_content(argv[5]) == 1)
+	if ((argv[5] && ft_atoi(argv[5]) <= 0) || (argv[5] && check_arg_content(argv[5]) == 1))
 		return (write(2, "Invalid number of times each philoopher must eat\n", 50));
 	return (0);
 }

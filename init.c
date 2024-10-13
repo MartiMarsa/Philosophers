@@ -13,7 +13,7 @@
 #include "philo.h"
 
 // Parses the users input
-void	parsr_args(t_philo *philo, char **argv)
+void	parse_args(t_philo *philo, char **argv)
 {
 	philo->time_to_die = ft_atoi(argv[2]);
 	philo->time_to_eat = ft_atoi(argv[3]);
@@ -26,8 +26,7 @@ void	parsr_args(t_philo *philo, char **argv)
 }
 
 // Initializes the philisophers
-void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks,
-				char **argv)
+void	init_philos(t_philo *philos, t_data *data, t_mtx *forks, char **argv)
 {
 	int	i;
 
@@ -53,7 +52,7 @@ void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks,
 }
 
 // Initializes the forks mutexes
-void	init_forks(pthread_mutex_t *forks, int philo_num)
+void	init_forks(t_mtx *forks, int philo_num)
 {
 	int	i;
 

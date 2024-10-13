@@ -49,6 +49,7 @@ void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks,
 			philos[i].r_fork = &forks[philos[i].num_of_philos - 1];
 		else
 			philos[i].r_fork = &forks[i - 1];
+	}
 }
 
 // Initializes the forks mutexes

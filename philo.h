@@ -64,11 +64,34 @@ typedef struct s_mtx
 }				t_mtx;
 
 // MAIN //
-
 int main(int argc, char **argv);
 
-//  UTILS //
+// INIT //
+void	parsr_args(t_philo *philo, char **argv);
+void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks,
+				char **argv);
+void	init_forks(pthread_mutex_t *forks, int philo_num);
+void	init_data(t_data *data, t_philo *philo);
 
+//  UTILS //
 int	ft_atoi(const char *s);
+void	print_message(char *str, t_philo *philo, int id);
+
+// CHECKER UTILS //
+int	philosopher_dead(t_philo *philo, size_t time_to_die);
+int	check_if_dead(t_philo *philos);
+int	check_if_all_ate(t_philo *philos);
+
+// ROUTINE STATES //
+void	think(t_philo *philo);
+void	eat(t_philo *philo);
+void	dream(t_philo *philo);
+
+// TABLE //
+void	destroy_all(char *str, t_data *data, t_mtx *forks);
+int dead_loop(t_philo *philo);
+void	*start_routine(void *ptr);
+void	*POS(void *ptr);
+int	thread_create(t_data *data, t_mtx *forks);
 
 #endif

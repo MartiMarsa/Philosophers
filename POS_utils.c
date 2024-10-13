@@ -5,12 +5,22 @@
 void	print_message(char *str, t_philo *philo, int id)
 {
 	size_t	time;
+	const char *color;
 
-	if (strcmp(str, "is eating"))
 	pthread_mutex_lock(philo->write_lock);
 	time = get_current_time() - philo->start_time;
+	if (!ft_strcmp(str, "is eating"))
+		color = COLOR_EAT;
+	else if (!ft_strcmp(str, "is thinking"))
+		color = COLOR_THINK;
+	else if (!ft_strcmp(str, "is sleeping"))
+		color = COLOR_SLEEP;
+	else if (!ft_strcmp(str, "has died"))
+		color = COLOR_DIE;
+	else
+		color = COLOR_RESET;
 	if (!dead_loop(philo))
-		printf("%zu %d %s\n", time, id, str);
+		printf("%s%zu %d %s%s\n", color, time, id, str, COLOR_RESET);
 	pthread_mutex_unlock(philo->write_lock);
 }
 
@@ -70,16 +80,4 @@ int	check_if_all_ate(t_philo *philos)
 		return (1);
 	}
 	
-}
-
-// Monitor thread routine
-void	*POS(void *ptr)
-{
-	t_philo	*philos;
-
-	philos = (t_philo *)ptr;
-	while (42)
-		if (check_if_dead(philos) == 1 || check_if_all_ate(philos) == 1)
-			break;
-	return (ptr);
 }

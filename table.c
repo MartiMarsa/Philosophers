@@ -1,9 +1,26 @@
 
 #include "philo.h"
 
+// Destroys all the mutexes
+void	destroy_all(char *str, t_data *data, t_mtx *forks)
+{
+	int	i;
+
+	i = -1;
+	if (str)
+	{
+		write(2, str, ft_strlen(str));
+		write(2, "\n", 1);
+	}
+	pthread_mutex_destroy(&data->write_lock);
+	pthread_mutex_destroy(&data->meal_lock);
+	pthread_mutex_destroy(&data->dead_lock);
+	while (++i < data->philos[0].num_of_philos)
+		pthread_mutex_destroy(&forks[i]);
+	
+}
 
 // Check if someone has died
-
 int dead_loop(t_philo *philo)
 {
 	pthread_mutex_lock(philo->dead_lock);
@@ -27,6 +44,18 @@ void	*start_routine(void *ptr)
 		dream(philo);
 		think(philo);
 	}
+	return (ptr);
+}
+
+// Monitor thread routine
+void	*POS(void *ptr)
+{
+	t_philo	*philos;
+
+	philos = (t_philo *)ptr;
+	while (42)
+		if (check_if_dead(philos) == 1 || check_if_all_ate(philos) == 1)
+			break;
 	return (ptr);
 }
 

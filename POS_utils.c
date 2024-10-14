@@ -56,10 +56,10 @@ int	check_if_dead(t_philo *philos)
 	{
 		if (philosopher_dead(&philos[i], philos[i].time_to_die))
 		{
-			print_message("died", &philos[i].dead_lock);
+			print_message("died", philos, philos[i].id);
 			pthread_mutex_lock(philos[0].dead_lock);
 			*philos->dead = true;
-			phtread_mutex_unlock(philos[0].dead_lock);
+			pthread_mutex_unlock(philos[0].dead_lock);
 			return (1);
 		}
 	}
@@ -90,5 +90,5 @@ int	check_if_all_ate(t_philo *philos)
 		pthread_mutex_unlock(philos[0].dead_lock);
 		return (1);
 	}
-	
+	return (0);
 }

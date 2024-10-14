@@ -26,7 +26,7 @@ void	parse_args(t_philo *philo, char **argv)
 }
 
 // Initializes the philisophers
-void	init_philos(t_philo *philos, t_data *data, t_mtx *forks, char **argv)
+void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks, char **argv)
 {
 	int	i;
 
@@ -52,7 +52,7 @@ void	init_philos(t_philo *philos, t_data *data, t_mtx *forks, char **argv)
 }
 
 // Initializes the forks mutexes
-void	init_forks(t_mtx *forks, int philo_num)
+void	init_forks(pthread_mutex_t *forks, int philo_num)
 {
 	int	i;
 
@@ -67,7 +67,7 @@ void	init_forks(t_mtx *forks, int philo_num)
 void	init_data(t_data *data, t_philo *philo)
 {
 	data->dead_flag = false;
-	data->philos = &philo;
+	data->philos = philo;
 	pthread_mutex_init(&data->write_lock, NULL);
 	pthread_mutex_init(&data->dead_lock, NULL);
 	pthread_mutex_init(&data->meal_lock, NULL);

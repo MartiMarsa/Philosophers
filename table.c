@@ -13,7 +13,7 @@
 #include "philo.h"
 
 // Destroys all the mutexes
-void	destroy_all(char *str, t_data *data, t_mtx *forks)
+void	destroy_all(char *str, t_data *data, pthread_mutex_t *forks)
 {
 	int	i;
 
@@ -71,7 +71,7 @@ void	*POS(void *ptr)
 }
 
 // Create and protect all the threads
-int	thread_create(t_data *data, t_mtx *forks)
+int	thread_create(t_data *data, pthread_mutex_t *forks)
 {
 	pthread_t	waiter;
 	int			i;
@@ -81,7 +81,7 @@ int	thread_create(t_data *data, t_mtx *forks)
 	i = -1;
 	while (++i < data->philos[0].num_of_philos)
 	{
-		if (pthread_create(&data->philos[i].thread, NULL, &start_routine, &data->philos[i] != 0))
+		if (pthread_create(&data->philos[i].thread, NULL, &start_routine, &data->philos[i]) != 0)
 			destroy_all("Thread creation error", data, forks);
 	}
 	if (pthread_join(waiter, NULL) != 0)
@@ -89,7 +89,7 @@ int	thread_create(t_data *data, t_mtx *forks)
 	i = -1;
 	while (++i < data->philos[0].num_of_philos)
 	{
-		if (pthread_join(data->philos[i].thread, NULL != 0))
+		if (pthread_join(data->philos[i].thread, NULL) != 0)
 			destroy_all("Thread join error", data, forks);
 	}
 	return (0);

@@ -28,10 +28,6 @@
 # define COLOR_SLEEP "\033[1;33m"    // Yellow
 # define COLOR_DIE "\033[1;31m"      // Red
 
-typedef struct s_mtx
-{
-	pthread_mutex_t	mtx;
-}				t_mtx;
 
 typedef struct s_philo
 {
@@ -47,19 +43,19 @@ typedef struct s_philo
 	int				num_of_philos;
 	int				num_times_to_eat;
 	bool			*dead;
-	t_mtx			*r_fork;
-	t_mtx			*l_fork;
-	t_mtx			*write_lock;
-	t_mtx			*dead_lock;
-	t_mtx			*meal_lock;
+	pthread_mutex_t		*r_fork;
+	pthread_mutex_t		*l_fork;
+	pthread_mutex_t		*write_lock;
+	pthread_mutex_t		*dead_lock;
+	pthread_mutex_t		*meal_lock;
 }					t_philo;
 
 typedef struct s_data
 {
 	bool			dead_flag;
-	t_mtx			dead_lock;
-	t_mtx			meal_lock;
-	t_mtx			write_lock;
+	pthread_mutex_t		dead_lock;
+	pthread_mutex_t		meal_lock;
+	pthread_mutex_t		write_lock;
 	t_philo			*philos;
 }					t_data;
 
@@ -68,8 +64,8 @@ int main(int argc, char **argv);
 
 // INIT //
 void	parse_args(t_philo *philo, char **argv);
-void	init_philos(t_philo *philos, t_data *data, t_mtx *forks, char **argv);
-void	init_forks(t_mtx *forks, int philo_num);
+void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *orks, char **argv);
+void	init_forks(pthread_mutex_t *orks, int philo_num);
 void	init_data(t_data *data, t_philo *philo);
 
 //  UTILS //
@@ -92,10 +88,10 @@ void	eat(t_philo *philo);
 void	dream(t_philo *philo);
 
 // TABLE //
-void	destroy_all(char *str, t_data *data, t_mtx *forks);
+void	destroy_all(char *str, t_data *data, pthread_mutex_t *orks);
 int dead_loop(t_philo *philo);
 void	*start_routine(void *ptr);
 void	*POS(void *ptr);
-int	thread_create(t_data *data, t_mtx *forks);
+int	thread_create(t_data *data, pthread_mutex_t *orks);
 
 #endif

@@ -40,7 +40,7 @@ int	philosopher_dead(t_philo *philo, size_t time_to_die)
 {
 	pthread_mutex_lock(philo->meal_lock);
 	if (get_current_time() - philo->last_meal >= time_to_die
-			&& !philo->eating)
+			&& philo->eating == false)
 		return (pthread_mutex_unlock(philo->meal_lock), 1);
 	pthread_mutex_unlock(philo->meal_lock);
 	return (0);
@@ -83,6 +83,7 @@ int	check_if_all_ate(t_philo *philos)
 				done++;
 			pthread_mutex_unlock(philos[i].meal_lock);
 	}
+	done++;
 	if (done == philos[0].num_times_to_eat)
 	{
 		pthread_mutex_lock(philos[0].dead_lock);

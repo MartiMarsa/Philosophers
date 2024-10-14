@@ -15,17 +15,17 @@ NAME = philo
 
 SRC = main.c utils.c init.c POS_utils.c routine.c table.c
 
-FLAGS = -Wall -Wextra -Werror -O3 -pthread
+FLAGS = -Wall -Wextra -Werror -g -O3 -pthread -O0
 
 HEADER = ./philo.h
 
-# SANITIZER = -fsanitize=thread
+SANITIZER = -fsanitize=thread
 
-.PHONY: all clean fclean re debug
+.PHONY: all clean fclean
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(HEADER)
+$(NAME): $(SRC) $(HEADER) $(MAKEFILE)
 	@cc $(FLAGS) -o $(NAME) $(SRC) $(SANITIZER)
 
 clean:
@@ -35,9 +35,3 @@ fclean: clean
 	@rm -f $(NAME)
 
 re: fclean all
-
-debug: FLAGS += -g
-debug: re
-
-delay:
-	python3 delay_o_meter.py

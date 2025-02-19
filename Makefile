@@ -10,28 +10,43 @@
 #                                                                              #
 # **************************************************************************** #
 
+# Colors
+
+RED		= \033[31m
+GREEN	= \033[32m
+YELLOW	= \033[33m
+BLUE	= \033[34m
+RESET	= \033[0
 
 NAME = philo
 
 SRC = main.c utils.c init.c POS_utils.c routine.c table.c
+OBJ = $(SRC:.c=.o)
 
-FLAGS = -Wall -Wextra -Werror -g -O3 -pthread -O0
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
 
 HEADER = ./philo.h
 
-SANITIZER = -fsanitize=thread
+# SANITIZER = -fsanitize=thread
 
 .PHONY: all clean fclean
 
 all: $(NAME)
 
-$(NAME): $(SRC) $(HEADER) $(MAKEFILE)
-	@cc $(FLAGS) -o $(NAME) $(SRC) $(SANITIZER)
+$(NAME): $(OBJ) Makefile
+	@cc $(CFLAGS) -o $(NAME) $(OBJ) $(SANITIZER)
+	@echo "$(GREEN)Executable $(NAME) created$(RESET)"
+
+%.o: %.c $(HEADER)
+	@cc $(CFLAGS) -c $< -o $@
+	@echo "$(BLUE)Compiling $<$(RESET)"
 
 clean:
-	@rm -f $(NAME)
+	@rm -f $(OBJ)
+	@echo "$(RED)Object files deleted$(RESET)"
 
 fclean: clean
 	@rm -f $(NAME)
+	@echo "$(RED)Executable $(NAME) deleted$(RESET)"
 
 re: fclean all

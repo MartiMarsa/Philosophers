@@ -25,7 +25,6 @@ void	dream(t_philo *philo)
 	ft_usleep(philo->time_to_sleep);
 }
 
-
 // Eat function
 void	eat(t_philo *philo)
 {
@@ -35,7 +34,7 @@ void	eat(t_philo *philo)
 	{
 		ft_usleep(philo->time_to_die);
 		pthread_mutex_unlock(philo->r_fork);
-		return;
+		return ;
 	}
 	pthread_mutex_lock(philo->l_fork);
 	print_message("has taken a fork", philo, philo->id);
@@ -47,6 +46,6 @@ void	eat(t_philo *philo)
 	philo->eating = false;
 	pthread_mutex_unlock(philo->meal_lock);
 	ft_usleep(philo->time_to_eat);
-	pthread_mutex_unlock(philo->r_fork);
 	pthread_mutex_unlock(philo->l_fork);
+	pthread_mutex_unlock(philo->r_fork);
 }

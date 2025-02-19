@@ -28,11 +28,10 @@ void	destroy_all(char *str, t_data *data, pthread_mutex_t *forks)
 	pthread_mutex_destroy(&data->dead_lock);
 	while (++i < data->philos[0].num_of_philos)
 		pthread_mutex_destroy(&forks[i]);
-	
 }
 
 // Check if someone has died
-int dead_loop(t_philo *philo)
+int	dead_loop(t_philo *philo)
 {
 	pthread_mutex_lock(philo->dead_lock);
 	if (*philo->dead == 1)
@@ -45,7 +44,7 @@ int dead_loop(t_philo *philo)
 void	*start_routine(void *ptr)
 {
 	t_philo	*philo;
-	
+
 	philo = (t_philo *)ptr;
 	if (philo->id % 2 == 0)
 		ft_usleep(1);
@@ -59,14 +58,14 @@ void	*start_routine(void *ptr)
 }
 
 // Monitor thread routine
-void	*POS(void *ptr)
+void	*pos(void *ptr)
 {
 	t_philo	*philos;
 
 	philos = (t_philo *)ptr;
 	while (42)
 		if (check_if_dead(philos) == 1 || check_if_all_ate(philos) == 1)
-			break;
+			break ;
 	return (ptr);
 }
 
@@ -76,21 +75,20 @@ int	thread_create(t_data *data, pthread_mutex_t *forks)
 	pthread_t	waiter;
 	int			i;
 
-	if (pthread_create(&waiter, NULL, &POS, data->philos) != 0)
+	if (pthread_create(&waiter, NULL, &pos, data->philos) != 0)
 		destroy_all("Thread creation error", data, forks);
 	i = -1;
 	while (++i < data->philos[0].num_of_philos)
 	{
-		if (pthread_create(&data->philos[i].thread, NULL, &start_routine, &data->philos[i]) != 0)
+		if (pthread_create(&data->philos[i].thread, NULL,
+				&start_routine, &data->philos[i]) != 0)
 			destroy_all("Thread creation error", data, forks);
 	}
 	if (pthread_join(waiter, NULL) != 0)
 		destroy_all("Thread join error", data, forks);
 	i = -1;
 	while (++i < data->philos[0].num_of_philos)
-	{
 		if (pthread_join(data->philos[i].thread, NULL) != 0)
 			destroy_all("Thread join error", data, forks);
-	}
 	return (0);
 }

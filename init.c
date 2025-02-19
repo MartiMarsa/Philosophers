@@ -26,7 +26,8 @@ void	parse_args(t_philo *philo, char **argv)
 }
 
 // Initializes the philisophers
-void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t *forks, char **argv)
+void	init_philos(t_philo *philos, t_data *data, pthread_mutex_t
+*forks, char **argv)
 {
 	int	i;
 

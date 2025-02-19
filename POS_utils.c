@@ -15,8 +15,8 @@
 // Print message function
 void	print_message(char *str, t_philo *philo, int id)
 {
-	size_t	time;
-	const char *color;
+	size_t		time;
+	const char	*color;
 
 	pthread_mutex_lock(philo->write_lock);
 	time = get_current_time() - philo->start_time;
@@ -26,7 +26,7 @@ void	print_message(char *str, t_philo *philo, int id)
 		color = COLOR_THINK;
 	else if (!ft_strcmp(str, "is sleeping"))
 		color = COLOR_SLEEP;
-	else if (!ft_strcmp(str, "has died"))
+	else if (!ft_strcmp(str, "died"))
 		color = COLOR_DIE;
 	else
 		color = COLOR_RESET;
@@ -40,7 +40,7 @@ int	philosopher_dead(t_philo *philo, size_t time_to_die)
 {
 	pthread_mutex_lock(philo->meal_lock);
 	if (get_current_time() - philo->last_meal >= time_to_die
-			&& philo->eating == false)
+		&& !philo->eating)
 		return (pthread_mutex_unlock(philo->meal_lock), 1);
 	pthread_mutex_unlock(philo->meal_lock);
 	return (0);
@@ -72,19 +72,18 @@ int	check_if_all_ate(t_philo *philos)
 	int	i;
 	int	done;
 
-	if (philos[0].num_times_to_eat == -1)
-		return (0);
 	i = -1;
 	done = 0;
+	if (philos[0].num_times_to_eat == -1)
+		return (0);
 	while (++i < philos[0].num_of_philos)
 	{
-			pthread_mutex_lock(philos[i].meal_lock);
-			if (philos[i].meals_eaten == philos[i].num_times_to_eat)
-				done++;
-			pthread_mutex_unlock(philos[i].meal_lock);
+		pthread_mutex_lock(philos[i].meal_lock);
+		if (philos[i].meals_eaten == philos[i].num_times_to_eat)
+			done++;
+		pthread_mutex_unlock(philos[i].meal_lock);
 	}
-	done++;
-	if (done == philos[0].num_times_to_eat)
+	if (done == philos[0].num_of_philos)
 	{
 		pthread_mutex_lock(philos[0].dead_lock);
 		*philos->dead = true;

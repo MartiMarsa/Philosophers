@@ -27,17 +27,17 @@ size_t	ft_strlen(const char *str)
 // Enhanced version of usleep allowing frequent condition checks
 int	ft_usleep(size_t milliseconds)
 {
-	size_t start;
+	size_t	start;
 
 	start = get_current_time();
 	while ((get_current_time() - start) < milliseconds)
-		usleep(300);
+		usleep(100);
 	return (0);
 }
 
 // Gets the current time in milliseconds
 size_t	get_current_time(void)
-{	
+{
 	struct timeval	time;
 
 	if (gettimeofday(&time, NULL) == -1)
@@ -70,7 +70,6 @@ int	ft_atoi(const char *s)
 	i = 0;
 	sign = 1;
 	result = 0;
-
 	while (s[i] <= 32)
 		i++;
 	if (s[i] == '-')
